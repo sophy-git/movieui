@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: delivery-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /users
+            pathType: Prefix
+            backend:
+              service:
+                name: userservice
+                port:
+                  number: 8080
+
+          - path: /movies
+            pathType: Prefix
+            backend:
+              service:
+                name: movieservice
+                port:
+                  number: 8080
+
+          - path: /bookings
+            pathType: Prefix
+            backend:
+              service:
+                name: bookingservice
+                port:
+                  number: 8080     
+                     
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: movieui
+                port:
+                  number: 8080

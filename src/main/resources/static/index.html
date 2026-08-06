@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="bg-shape bg-shape-one" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-two" aria-hidden="true"></div>
+
+  <main class="page">
+    <header class="hero reveal">
+      <p class="eyebrow">Movie UI</p>
+      <h1>Movie and Booking Console</h1>
+      <p class="subtitle">Select a user on the left, then book a movie on the right using the current time.</p>
+    </header>
+
+    <section class="card reveal">
+      <h2>Booking Dashboard</h2>
+      <p class="hint">왼쪽에서 사용자를 선택한 뒤 오른쪽 영화 목록에서 예매하기를 누르면 현재 시각으로 예약됩니다.</p>
+      <div class="top-actions">
+        <button id="reloadDashboard" type="button">전체 새로 고침</button>
+        <button id="loadAllBookings" type="button" class="ghost">예매 목록 보기</button>
+      </div>
+      <div class="split-layout">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>User List</h3>
+              <p class="hint">GET /users</p>
+            </div>
+            <button id="loadAllUsers" type="button" class="ghost">사용자 새로고침</button>
+          </div>
+          <p id="selectedUser" class="selected-chip">선택된 사용자 없음</p>
+          <div class="table-wrap compact">
+            <table>
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>선택</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody">
+                <tr>
+                  <td colspan="4">Load users to view list.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Movie List</h3>
+              <p class="hint">GET /movies</p>
+            </div>
+            <button id="loadAllMovies" type="button" class="ghost">영화 새로고침</button>
+          </div>
+          <div class="table-wrap compact">
+            <table>
+              <thead>
+                <tr>
+                  <th>Movie ID</th>
+                  <th>Title</th>
+                  <th>Producer</th>
+                  <th>Price</th>
+                  <th>Open Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="movieTableBody">
+                <tr>
+                  <td colspan="6">Load movies to view list.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <section class="booking-list-panel">
+        <div class="panel-header booking-header">
+          <div>
+            <h3>Booking List</h3>
+            <p class="hint">GET /bookings 결과가 여기에 표시됩니다.</p>
+          </div>
+        </div>
+        <div class="table-wrap compact">
+          <table>
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>User ID</th>
+                <th>Movie ID</th>
+                <th>Booking Date</th>
+              </tr>
+            </thead>
+            <tbody id="bookingTableBody">
+              <tr>
+                <td colspan="4">예매 목록 보기를 눌러 데이터를 불러오세요.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section class="card reveal form-card">
+      <h2>1) Create Movie (POST /movies)</h2>
+      <form id="createMovieForm" class="grid two">
+        <label>
+          Title
+          <input name="title" type="text" maxlength="255" required>
+        </label>
+        <label>
+          Producer
+          <input name="producer" type="text" maxlength="255" required>
+        </label>
+        <label>
+          Price
+          <input name="price" type="number" min="0" required>
+        </label>
+        <label>
+          Open Date
+          <input name="openDate" type="datetime-local" required>
+        </label>
+        <div class="actions span-two">
+          <button type="submit">Create Movie</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card reveal form-card">
+      <h2>2) Movie Lookup and Edit</h2>
+      <form id="getMovieForm" class="grid two">
+        <label>
+          Movie ID
+          <input name="movieId" type="number" min="1" required>
+        </label>
+        <div class="actions span-two">
+          <button type="submit">Get Movie</button>
+        </div>
+      </form>
+
+      <form id="updateMovieForm" class="grid two">
+        <label>
+          Target Movie ID
+          <input name="targetMovieId" type="number" min="1" required>
+        </label>
+        <label>
+          New Title
+          <input name="title" type="text" maxlength="255" required>
+        </label>
+        <label>
+          New Producer
+          <input name="producer" type="text" maxlength="255" required>
+        </label>
+        <label>
+          New Price
+          <input name="price" type="number" min="0" required>
+        </label>
+        <label>
+          New Open Date
+          <input name="openDate" type="datetime-local" required>
+        </label>
+        <div class="actions span-two">
+          <button type="submit">Update Movie</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card reveal form-card">
+      <h2>3) Delete Movie (DELETE /movies/{movieId})</h2>
+      <form id="deleteMovieForm" class="grid two">
+        <label>
+          Movie ID
+          <input name="movieId" type="number" min="1" required>
+        </label>
+        <div class="actions span-two">
+          <button type="submit">Delete Movie</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card reveal">
+      <h2>4) Activity</h2>
+      <p id="status" class="status">Ready</p>
+      <p id="requestMeta" class="request-meta">No request yet.</p>
+      <div id="errorBox" class="error-box" hidden>
+        <strong>Error</strong>
+        <pre id="errorOutput" class="output error-output" aria-live="polite"></pre>
+      </div>
+      <pre id="output" class="output" aria-live="polite">{ "message": "API responses will appear here" }</pre>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
