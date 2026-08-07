@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: movieui
-          image: yklee2002/movieui
+          image: punsophy678/movieui
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
